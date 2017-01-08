@@ -14,7 +14,7 @@ namespace Tozny.Auth
 			this.realmSecret = realmSecret;
 		}
 
-		protected override T rawCall<T>(string method, Dictionary<string, string> parameters)
+		protected override async Task<ApiResponse> rawCall(ApiRequest request)
 		{
 			throw new NotImplementedException();
 		}

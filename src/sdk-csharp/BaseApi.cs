@@ -5,6 +5,26 @@ using System.Threading.Tasks;
 
 namespace Tozny.Auth
 {
+	abstract public class ApiRequest: Dictionary<String, String>
+	{
+		protected String method;
+
+		public ApiRequest()
+		{
+			throw new NotImplementedException();
+		}
+
+		public ApiRequest(String method)
+		{
+			this.method = method;
+		}
+	}
+
+	abstract public class ApiResponse: Dictionary<String, String>
+	{
+
+	}
+
     abstract public class BaseApi
     {
 		protected String apiUrl;
@@ -23,6 +43,6 @@ namespace Tozny.Auth
 			this.realmKeyId = realmKeyId;
 		}
 
-		abstract protected T rawCall<T>(String method, Dictionary<String, String> parameters);
+		abstract protected Task<ApiResponse> rawCall(ApiRequest request);
 	}
 }
