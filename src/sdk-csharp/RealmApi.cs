@@ -81,6 +81,90 @@ namespace Tozny.Auth
 			public String CryptoSuite { get { return this.crypto_suite; } }
 			public String DisplayName { get { return this.display_name; } }
 		}
+
+		public class UserUpdateResponse
+		{
+			protected String username;
+			protected String user_id;
+			protected String user_temp_key;
+			protected String secret_enrollment_url;
+			protected String secret_enrollment_qr_url;
+			protected String logo_url;
+			protected String info_url;
+			protected String crypto_suite;
+			protected String display_name;
+
+			public UserUpdateResponse(
+				String username,
+				String user_id,
+				String user_temp_key,
+				String secret_enrollment_url,
+				String secret_enrollment_qr_url,
+				String logo_url,
+				String info_url,
+				String crypto_suite,
+				String display_name
+				)
+			{
+				this.username = username;
+				this.user_id = user_id;
+				this.user_temp_key = user_temp_key;
+				this.secret_enrollment_url = secret_enrollment_url;
+				this.secret_enrollment_qr_url = secret_enrollment_qr_url;
+				this.logo_url = logo_url;
+				this.info_url = info_url;
+				this.crypto_suite = crypto_suite;
+				this.display_name = display_name;
+			}
+
+			public String Username { get { return this.username; } }
+			public String UserID { get { return this.user_id; } }
+			public String UserTempKey { get { return this.user_temp_key; } }
+			public String SecretEnrollmentUrl { get { return this.secret_enrollment_url; } }
+			public String SecretEnrollmentQrUrl { get { return this.secret_enrollment_qr_url; } }
+			public String LogoUrl { get { return this.logo_url; } }
+			public String InfoUrl { get { return this.info_url; } }
+			public String CryptoSuite { get { return this.crypto_suite; } }
+			public String DisplayName { get { return this.display_name; } }
+		}
+
+		public class QuestionChallenge
+		{
+			protected String challenge;
+			protected String session_id;
+			protected String realm_key_id;
+			protected String qr_url;
+			protected String mobile_url;
+			protected Int32 created_at;
+			protected String presence;
+
+			public QuestionChallenge(
+				String challenge,
+				String session_id,
+				String realm_key_id,
+				String qr_url,
+				String mobile_url,
+				Int32 created_at,
+				String presence
+				)
+			{
+				this.challenge = challenge;
+				this.session_id = session_id;
+				this.realm_key_id = realm_key_id;
+				this.qr_url = qr_url;
+				this.mobile_url = mobile_url;
+				this.created_at = created_at;
+				this.presence = presence;
+			}
+
+			public String Challenge { get { return this.challenge; } }
+			public String SessionId { get { return this.session_id; } }
+			public String RealmKeyId { get { return this.realm_key_id; } }
+			public String QrUrl { get { return this.qr_url; } }
+			public String MobileUrl { get { return this.mobile_url; } }
+			public Int32 CreatedAt { get { return this.created_at; } }
+			public String Presence { get { return this.presence; } }
+		}
 		
 		public async Task<UserAddResponse> user_add(Boolean defer, Dictionary<String, String> fields, String public_key)
 		{
@@ -130,29 +214,78 @@ namespace Tozny.Auth
 			}
 		}
 
-		public async Task user_update(String user_id, Dictionary<String, String> fields)
+		public async Task<UserUpdateResponse> user_update(String user_id, Dictionary<String, String> fields)
 		{
+			var request = new RealmRequest("user_update");
+			request.Add("user_id", user_id);
+			request.Add("extra_fields", encodedMap(fields));
 
+			dynamic response = await this.rawCall(request);
+
+			if (response.GetValue("return") == "ok")
+			{
+				String username = response.GetValue("username");
+				String server_user_id = response.GetValue("user_id");
+				String user_temp_key = response.GetValue("user_temp_key");
+				String secret_enrollment_url = response.GetValue("secret_enrollment_url");
+				String secret_enrollment_qr_url = response.GetValue("secret_enrollment_qr_url");
+				String logo_url = response.GetValue("logo_url");
+				String info_url = response.GetValue("info_url");
+				String crypto_suite = response.GetValue("crypto_suite");
+				String display_name = response.GetValue("display_name");
+
+				return new UserUpdateResponse(
+					username,
+					server_user_id,
+					user_temp_key,
+					secret_enrollment_url,
+					secret_enrollment_qr_url,
+					logo_url,
+					info_url,
+					crypto_suite,
+					display_name
+					);
+			}
+			else
+			{
+				throw new Exception("API Error");
+			}
 		}
 
-		public async Task question_challenge(String user_id, String question)
+		public async Task<QuestionChallenge> question_challenge(String user_id, String question)
 		{
 			var request = new RealmRequest("question_challenge");
 			request.Add("user_id", user_id);
 			request.Add("question", question);
 
-			try
-			{
-				dynamic response = await this.rawCall(request);
-			} catch(Exception e)
-			{
+			dynamic response = await this.rawCall(request);
 
+			if (response.GetValue("return") == "ok")
+			{
+				String challenge = response.GetValue("challenge");
+				String session_id = response.GetValue("session_id");
+				String realm_key_id = response.GetValue("realm_key_id");
+				String qr_url = response.GetValue("qr_url");
+				String mobile_url = response.GetValue("mobile_url");
+				Int32 created_at = response.GetValue("created_at");
+				String presence = response.GetValue("presence");
+
+				return new QuestionChallenge(challenge, session_id, realm_key_id, qr_url, mobile_url, created_at, presence);
+			}else
+			{
+				throw new Exception("API Error");
 			}
 		}
 
-		public async Task user_push(String user_id, String session_id)
+		public async Task<Boolean> user_push(String user_id, String session_id)
 		{
+			var request = new RealmRequest("user_push");
+			request.Add("user_id", user_id);
+			request.Add("session_id", session_id);
 
+			dynamic response = await this.rawCall(request);
+
+			return response.GetValue("return") == "ok";
 		}
 
 		protected override async Task<JObject> rawCall(ApiRequest request)
