@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,11 +19,11 @@ namespace Tozny.Auth
 		{
 			this.method = method;
 		}
-	}
 
-	abstract public class ApiResponse: Dictionary<String, String>
-	{
-
+		public string Method
+		{
+			get { return this.method; }
+		}
 	}
 
     abstract public class BaseApi
@@ -43,6 +44,6 @@ namespace Tozny.Auth
 			this.realmKeyId = realmKeyId;
 		}
 
-		abstract protected Task<ApiResponse> rawCall(ApiRequest request);
+		abstract protected Task<JObject> rawCall(ApiRequest request);
 	}
 }

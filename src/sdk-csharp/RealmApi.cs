@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace Tozny.Auth
 			this.realmSecret = realmSecret;
 		}
 
-		protected override async Task<ApiResponse> rawCall(ApiRequest request)
+		protected override async Task<JObject> rawCall(ApiRequest request)
 		{
 			throw new NotImplementedException();
 		}

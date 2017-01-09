@@ -2792,6 +2792,7 @@
         "framework": ".NETStandard,Version=v1.6",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "9.0.1",
           "System.Net.Http": "4.3.0",
           "WinInsider.System.Net.Http.Formatting": "1.0.2"
         },
