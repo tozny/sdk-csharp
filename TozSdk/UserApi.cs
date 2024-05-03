@@ -1,38 +1,31 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
 
 namespace Tozny.Auth
 {
 	public class UserRequest : ApiRequest
 	{
-		public UserRequest(String method): base("user." + method) { }
+		public UserRequest(string method) : base("user." + method) { }
 	}
 
 	public class UserApi : BaseApi
-    {
-		public UserApi(String realmKeyId) : base(realmKeyId) { }
-		public UserApi(String apiUrl, String realmKeyId): base(apiUrl, realmKeyId) { }
+	{
+		public UserApi(string realmKeyId) : base(realmKeyId) { }
+		public UserApi(string apiUrl, string realmKeyId) : base(apiUrl, realmKeyId) { }
 
 		public class SessionStatus
 		{
-			protected String status;
-			protected String signed_data;
-			protected String signature;
+			protected string status;
+			protected string signed_data;
+			protected string signature;
 
-			public SessionStatus(String status, String signed_data, String signature)
+			public SessionStatus(string status, string signed_data, string signature)
 			{
 				this.status = status;
 				this.signed_data = signed_data;
 				this.signature = signature;
 			}
 
-			public String Status
+			public string Status
 			{
 				get
 				{
@@ -40,7 +33,7 @@ namespace Tozny.Auth
 				}
 			}
 
-			public String Signature
+			public string Signature
 			{
 				get
 				{
@@ -48,7 +41,7 @@ namespace Tozny.Auth
 				}
 			}
 
-			public String SignedData
+			public string SignedData
 			{
 				get
 				{
@@ -57,7 +50,7 @@ namespace Tozny.Auth
 			}
 		}
 
-		public async Task<SessionStatus> check_session_status(String sessionId)
+		public async Task<SessionStatus> check_session_status(string sessionId)
 		{
 			var request = new UserRequest("check_session_status");
 			request.Add("session_id", sessionId);
@@ -69,11 +62,13 @@ namespace Tozny.Auth
 				if (response.GetValue("status") == "pending")
 				{
 					return new SessionStatus("pending", null, null);
-				} else
+				}
+				else
 				{
 					return new SessionStatus(response.GetValue("status"), response.GetValue("signed_data"), response.GetValue("signature"));
 				}
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				return new SessionStatus("Invalid Session", null, null);
 			}
@@ -87,7 +82,7 @@ namespace Tozny.Auth
 				requestArgs.Add("method", request.Method);
 				requestArgs.Add("realm_key_id", this.realmKeyId);
 
-				foreach(KeyValuePair<string, string> parameter in request)
+				foreach (KeyValuePair<string, string> parameter in request)
 				{
 					requestArgs.Add(parameter.Key, parameter.Value);
 				}
@@ -104,7 +99,8 @@ namespace Tozny.Auth
 				if (responseObject.GetValue("return") == "error")
 				{
 					throw new Exception("API Error");
-				} else
+				}
+				else
 				{
 					return responseObject;
 				}

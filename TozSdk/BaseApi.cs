@@ -1,21 +1,17 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Tozny.Auth
 {
-	abstract public class ApiRequest: Dictionary<String, String>
+	abstract public class ApiRequest : Dictionary<string, string>
 	{
-		protected String method;
+		protected string method;
 
 		public ApiRequest()
 		{
 			throw new NotImplementedException();
 		}
 
-		public ApiRequest(String method)
+		public ApiRequest(string method)
 		{
 			this.method = method;
 		}
@@ -26,19 +22,19 @@ namespace Tozny.Auth
 		}
 	}
 
-    abstract public class BaseApi
-    {
-		protected String apiUrl;
-		protected String realmKeyId;
+	abstract public class BaseApi
+	{
+		protected string apiUrl;
+		protected string realmKeyId;
 
 		public BaseApi()
 		{
 			throw new NotImplementedException();
 		}
 
-		public BaseApi(String realmKeyId) : this("https://api.tozny.com/", realmKeyId) { }
+		public BaseApi(string realmKeyId) : this("https://api.tozny.com/", realmKeyId) { }
 
-		public BaseApi(String apiUrl, String realmKeyId)
+		public BaseApi(string apiUrl, string realmKeyId)
 		{
 			this.apiUrl = apiUrl;
 			this.realmKeyId = realmKeyId;

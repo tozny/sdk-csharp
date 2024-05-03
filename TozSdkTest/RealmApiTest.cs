@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Tozny.Auth;
-using Xunit;
-
-namespace Tozny.Auth.Tests
+﻿namespace Tozny.Auth.Tests
 {
 	public class RealmApiTest
 	{
-		protected String realm_key_id = "DO_NOT_COMMIT_THIS_VALUE";
-		protected String realm_secret = "DO_NOT_COMMIT_THIS_VALUE";
+		protected string realm_key_id = "DO_NOT_COMMIT_THIS_VALUE";
+		protected string realm_secret = "DO_NOT_COMMIT_THIS_VALUE";
 
 		[Fact]
 		public void testHashGeneration()
 		{
-			var realmSecret = "cb0325c9dce8aad854c3f65d30420d1602ee4538419165f32ead9504702dbd54";
+			var realmSecret = "  cb0325c9dce8aad854c3f65d30420d1602ee4538419165f32ead9504702dbd54";
 			var realmAPI = new RealmApi("sid_1234567", realmSecret);
 
 			var dataToSign = "eyJkYXRhIjoidG8gYmUgc2lnbmVkIiwiZ29lcyI6ImhlcmUifQ";
@@ -42,7 +35,7 @@ namespace Tozny.Auth.Tests
 
 			var user_id = "sid_5873e244deff1";
 			var username = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 8);
-			var fields = new Dictionary<String, String>();
+			var fields = new Dictionary<string, string>();
 			fields.Add("username", username);
 
 			var userUpdateResponse = await realmApi.user_update(user_id, fields);
