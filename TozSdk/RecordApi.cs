@@ -25,10 +25,7 @@ namespace Tozny.Auth
             return plainText;
         }
 
-        public Dictionary<string, JsonElement> DecryptRecordFromJson(
-            byte[] accessKey,
-            string recordJson
-        )
+        public string DecryptRecordFromJson(byte[] accessKey, string recordJson)
         {
             var jsonDocument = JsonDocument.Parse(recordJson);
             var decryptedRecord = new Dictionary<string, JsonElement>();
@@ -39,9 +36,7 @@ namespace Tozny.Auth
                     var newData = new Dictionary<string, string>();
                     foreach (var key in element.Value.EnumerateObject())
                     {
-                        Console.WriteLine($"{key.Name}: {key.Value}");
                         var plainText = DecryptRecord(accessKey, key.Value.ToString());
-                        Console.WriteLine(plainText);
                         newData.Add(key.Name, plainText);
                     }
                     decryptedRecord.Add(
@@ -55,7 +50,9 @@ namespace Tozny.Auth
                 }
             }
 
-            return decryptedRecord;
+            string decryptedRecordJson = JsonSerializer.Serialize(decryptedRecord);
+
+            return decryptedRecordJson;
         }
 
         public static byte[] Base64UrlDecode(string input)
