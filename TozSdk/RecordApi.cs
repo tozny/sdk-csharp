@@ -1,10 +1,27 @@
+using System.Text;
 using System.Text.Json;
+using Newtonsoft.Json;
 using Sodium;
 
 namespace Tozny.Auth
 {
     public class RecordApi
     {
+        public static byte[] Base64UrlDecode(string input)
+        {
+            string s = input.Replace('-', '+').Replace('_', '/');
+            switch (s.Length % 4)
+            {
+                case 2:
+                    s += "==";
+                    break;
+                case 3:
+                    s += "=";
+                    break;
+            }
+            return Convert.FromBase64String(s);
+        }
+
         public string DecryptRecord(byte[] accessKey, string encryptedData)
         {
             string[] dottedQuad = encryptedData.Split('.');
@@ -20,49 +37,34 @@ namespace Tozny.Auth
             return plainText;
         }
 
+        public bool IsNotMetaTag(string input)
+        {
+            string lowercaseInput = input.ToLower(); // Convert input string to lowercase
+
+            return !lowercaseInput.Contains("meta") && !lowercaseInput.Contains("plain");
+        }
+
         public string DecryptRecordFromJson(byte[] accessKey, string recordJson)
         {
             var jsonDocument = JsonDocument.Parse(recordJson);
-            var decryptedRecord = new Dictionary<string, JsonElement>();
+            var decryptedRecord = new Dictionary<string, string>();
             foreach (var element in jsonDocument.RootElement.EnumerateObject())
             {
-                if (element.Name == "data")
+                if (IsNotMetaTag(element.Name))
                 {
-                    var newData = new Dictionary<string, string>();
-                    foreach (var key in element.Value.EnumerateObject())
-                    {
-                        var plainText = DecryptRecord(accessKey, key.Value.ToString());
-                        newData.Add(key.Name, plainText);
-                    }
-                    decryptedRecord.Add(
-                        element.Name.ToString(),
-                        JsonDocument.Parse(JsonSerializer.Serialize(newData)).RootElement
-                    );
+                    var plainText = DecryptRecord(accessKey, element.Value.ToString());
+
+                    decryptedRecord.Add(element.Name.ToString(), plainText);
                 }
                 else
                 {
-                    decryptedRecord.Add(element.Name.ToString(), element.Value);
+                    decryptedRecord.Add(element.Name.ToString(), element.Value.ToString());
                 }
             }
 
-            string decryptedRecordJson = JsonSerializer.Serialize(decryptedRecord);
+            string decryptedRecordJson = JsonConvert.SerializeObject(decryptedRecord);
 
             return decryptedRecordJson;
-        }
-
-        public static byte[] Base64UrlDecode(string input)
-        {
-            string s = input.Replace('-', '+').Replace('_', '/');
-            switch (s.Length % 4)
-            {
-                case 2:
-                    s += "==";
-                    break;
-                case 3:
-                    s += "=";
-                    break;
-            }
-            return Convert.FromBase64String(s);
         }
     }
 }
