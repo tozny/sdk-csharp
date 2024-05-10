@@ -1,36 +1,82 @@
 using Tozny.Auth;
+using Xunit;
 
 namespace TozSdkTest
 {
     public class RecordApiTests
     {
         [Fact]
-        public void TestRecordApiDecryptsRecord()
+        public void TestRecordApiShouldDecryptRecord()
         {
             var recordApi = new RecordApi();
 
             byte[] accessKey = new byte[]
             {
-                // <Your access key here as byte array>
+                216,
+                36,
+                111,
+                96,
+                219,
+                190,
+                193,
+                124,
+                164,
+                160,
+                68,
+                132,
+                125,
+                32,
+                39,
+                187,
+                19,
+                147,
+                177,
+                135,
+                98,
+                76,
+                207,
+                97,
+                53,
+                126,
+                99,
+                9,
+                90,
+                202,
+                161,
+                75
             };
 
-            string recordAsJson = "<Your record here formatted as JSON";
-
-            // Example:
-            // "{"
-            //     + "\"First Name\": \"wflFJcZ5iTVpV5VdtjvcQCEvgIUvwBMWFHhLTLAmHuBOslmB9CuyzOCacXfQ_2Xz._OF1MV9zOcPUvfgF7twr1aN5U8P8_2Ke.2922mOVXlu-H6N6fZsf3QekyRDON.ujXUtGrKcMkk0jxCbeRkbIC3MmWddms3\","
-            //     + "\"Last Name\": \"2uwUnbzN-1rlzso-bSwdJRtaj4uBhbQTiy4a0Eec0AEbkXYfi1LfGU6yp9e3CfSc.GaxBvlOlc4qJUksWkx882C0-ald1-FRT.xwSbF_W8PF0iigXQ7gyllDe7n4ocTBcj.yXOqxpWrioaldmnv4LdPgb5RjtX2MP5i\","
-            //     + "\"Phone Number\": \"1xbnH670yt61UF45jz3BHKKnAjFGF3V5JL9Kpp9VIncPHFA84E35y_GFvZb_p4br.R84G_Q9mkT58LHwm7uFrfcyBkUntZ33d.m5bI9tO_k2kcN3xI4WEny8_5dDvoe358i341xg==.8PqhuJgS1YpmHnVuEZo_wXk3Ad4Llla2\","
-            //     + "\"Hourly Pay\": \"nS3sApRGL9s-P9DndBxKl0Xt0qxhP71VdgUli6SYhdYM_eyn0zmdgpLfTc4OIGIT.J-8w4eAxVtJVAqEzRDV3j_cs3PmxvBks.YjckQVY6kjCbWOpGsxXzTP4i.c1_gIA1RGaCMZRAHHvF8WSpQ2vkHZVBM\","
-            //     + "\"Max Hours Allowed\": \"BBXXSaoaO8SJvt3Vhw5HWCLJ3Cp5wZNHDQxUnIRz4WRD47NCHznFOMP_xFe4K1zC.G1SMjkW_XqJedvAlebu0tJyK7arctGE9.sJ2i873J_45-tygkFIJtczLf.Sj_YUXB3WldbS5ZOGE2IV5gMcBm0RP2e\","
-            //     + "\"Plain Meta\": {"
-            //     + "\"Type\": \"Employee\","
-            //     + "\"Company\": \"Tozny\","
-            //     + "\"Team\": \"Software\""
-            //     + "}"
-            //     + "}";
+            string recordAsJson =
+                "{"
+                + "\"Hello\": \"eXe3NPDQg3Uk-q_oQEDP3XWa1qTvESs21v_436mWbeh1VjdLPLupkkECTr6YF8iX.KupVC7EuKd5BIrlJ83RgJ4shYvVYPxJY.MKChHMri0_mZT3nk4c2U_Yx57RDq.gEkWI_F_0ai0nYmu9gMZnqy5eJubWdP1\","
+                + "\"Hello2\": \"ec-r4rXBOWMifdGJE0E3H5SNIzVMlYfpYfOTTOHtUCty1Y_LUJ8Q9MynhDa2MalL.HYRF8Rjn9vh9fOQvT-ZHGSW3J8v-qTfe.k6ij8kAyLndCzBtMV95aJZfv9ItEgw.37s4pAsEyW2_nhx3I9hhGcD_gL6L2KwK\","
+                + "\"Plain Meta\": {"
+                + "\"Type\": \"Test\""
+                + "}"
+                + "}";
             var decryptedRecord = recordApi.DecryptRecordFromJson(accessKey, recordAsJson);
             Console.WriteLine(decryptedRecord);
+        }
+
+        [Fact]
+        public async void TestRecordApiShouldFetchAuthToken()
+        {
+            var recordApi = new RecordApi();
+
+            var accessKey = await recordApi.GetAccessKey(
+                "https://api.e3db.com",
+                "7e1310b28746ba91849336028d566d9de8014b86c4bc2bfcd9747b9ad2f9c536",
+                "7f1c10f5251a1e2b1fe8259c10edc96933d5912fce2d8debbd486cb98ce6fc31",
+                "cdb1ffdb-e483-4c4f-9203-db18c1230c9c",
+                "cdb1ffdb-e483-4c4f-9203-db18c1230c9c",
+                "C-nEyHg-yElIiyjUN0H6SMQewKu7sxZo3YwfEhwNHVA",
+                "hXNziK_9GjcwrXBnUX9vTGT0iVxjXFeWVtxrBGdgWK8",
+                "test"
+            );
+            foreach (byte b in accessKey)
+            {
+                Console.Write($"{b} ");
+            }
         }
     }
 }
