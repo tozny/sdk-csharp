@@ -5,6 +5,17 @@ using Sodium;
 
 namespace Tozny.Auth
 {
+    public class ClientConfig
+    {
+        public string ApiUrl { get; set; }
+        public string ApiKeyId { get; set; }
+        public string ApiSecret { get; set; }
+        public string WriterId { get; set; }
+        public string ReaderId { get; set; }
+        public string PublicKey { get; set; }
+        public string PrivateKey { get; set; }
+    }
+
     public class RecordApi
     {
         public async Task<string> GetAuthTokenAsync(
@@ -36,20 +47,15 @@ namespace Tozny.Auth
             return authToken;
         }
 
-        public async Task<byte[]> GetAccessKey(
-            string apiUrl,
-            string apiKeyId,
-            string apiSecret,
-            string writerId,
-            string readerId,
-            string publicKey,
-            string privateKey,
-            string type
-        )
+        public async Task<byte[]> GetAccessKey(ClientConfig config, string type)
         {
-            var authToken = await GetAuthTokenAsync(apiUrl, apiKeyId, apiSecret);
+            var authToken = await GetAuthTokenAsync(
+                config.ApiUrl,
+                config.ApiKeyId,
+                config.ApiSecret
+            );
             string urlString =
-                $"{apiUrl}/v1/storage/access_keys/{writerId}/{writerId}/{readerId}/{type}";
+                $"{config.ApiUrl}/v1/storage/access_keys/{config.WriterId}/{config.WriterId}/{config.ReaderId}/{type}";
 
             using (HttpClient client = new HttpClient())
             {
@@ -68,8 +74,9 @@ namespace Tozny.Auth
                 string[] eakFields = eak.Split('.');
                 byte[] cipherBytes = Base64UrlDecode(eakFields[0]);
                 byte[] nonceBytes = Base64UrlDecode(eakFields[1]);
-                byte[] pubKeyBytes = Base64UrlDecode(publicKey);
-                byte[] privKeyBytes = Base64UrlDecode(privateKey);
+                byte[] pubKeyBytes = Base64UrlDecode(config.PublicKey);
+                byte[] privKeyBytes = Base64UrlDecode(config.PrivateKey);
+                // Decrypt the encrypted access key
                 byte[] akBytes = PublicKeyBox.Open(
                     cipherBytes,
                     nonceBytes,
@@ -112,7 +119,8 @@ namespace Tozny.Auth
 
         public bool IsNotMetaTag(string input)
         {
-            string lowercaseInput = input.ToLower(); // Convert input string to lowercase
+            // Convert input string to lowercase
+            string lowercaseInput = input.ToLower();
 
             return !lowercaseInput.Contains("meta") && !lowercaseInput.Contains("plain");
         }
@@ -126,7 +134,6 @@ namespace Tozny.Auth
                 if (IsNotMetaTag(element.Name))
                 {
                     var plainText = DecryptRecord(accessKey, element.Value.ToString());
-
                     decryptedRecord.Add(element.Name.ToString(), plainText);
                 }
                 else

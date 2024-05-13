@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Tozny.Auth;
 using Xunit;
 
@@ -55,7 +56,11 @@ namespace TozSdkTest
                 + "}"
                 + "}";
             var decryptedRecord = recordApi.DecryptRecordFromJson(accessKey, recordAsJson);
-            Console.WriteLine(decryptedRecord);
+            string expectedJson =
+                "{\"Hello\":\"world\",\"Hello2\":\"world2\",\"Plain Meta\":\"{\\\"Type\\\": \\\"Test\\\"}\"}";
+            var expectedJObject = JObject.Parse(expectedJson);
+            var actualJObject = JObject.Parse(decryptedRecord);
+            Assert.True(JToken.DeepEquals(expectedJObject, actualJObject));
         }
 
         [Fact]
@@ -63,20 +68,55 @@ namespace TozSdkTest
         {
             var recordApi = new RecordApi();
 
-            var accessKey = await recordApi.GetAccessKey(
-                "https://api.e3db.com",
-                "7e1310b28746ba91849336028d566d9de8014b86c4bc2bfcd9747b9ad2f9c536",
-                "7f1c10f5251a1e2b1fe8259c10edc96933d5912fce2d8debbd486cb98ce6fc31",
-                "cdb1ffdb-e483-4c4f-9203-db18c1230c9c",
-                "cdb1ffdb-e483-4c4f-9203-db18c1230c9c",
-                "C-nEyHg-yElIiyjUN0H6SMQewKu7sxZo3YwfEhwNHVA",
-                "hXNziK_9GjcwrXBnUX9vTGT0iVxjXFeWVtxrBGdgWK8",
-                "test"
-            );
-            foreach (byte b in accessKey)
+            var clientConfig = new ClientConfig
             {
-                Console.Write($"{b} ");
-            }
+                ApiUrl = "https://api.e3db.com",
+                ApiKeyId = "7e1310b28746ba91849336028d566d9de8014b86c4bc2bfcd9747b9ad2f9c536",
+                ApiSecret = "7f1c10f5251a1e2b1fe8259c10edc96933d5912fce2d8debbd486cb98ce6fc31",
+                WriterId = "cdb1ffdb-e483-4c4f-9203-db18c1230c9c",
+                ReaderId = "cdb1ffdb-e483-4c4f-9203-db18c1230c9c",
+                PublicKey = "C-nEyHg-yElIiyjUN0H6SMQewKu7sxZo3YwfEhwNHVA",
+                PrivateKey = "hXNziK_9GjcwrXBnUX9vTGT0iVxjXFeWVtxrBGdgWK8"
+            };
+
+            byte[] accessKey = await recordApi.GetAccessKey(clientConfig, "test");
+
+            byte[] expectedAccessKey = new byte[]
+            {
+                216,
+                36,
+                111,
+                96,
+                219,
+                190,
+                193,
+                124,
+                164,
+                160,
+                68,
+                132,
+                125,
+                32,
+                39,
+                187,
+                19,
+                147,
+                177,
+                135,
+                98,
+                76,
+                207,
+                97,
+                53,
+                126,
+                99,
+                9,
+                90,
+                202,
+                161,
+                75
+            };
+            Assert.Equal(expectedAccessKey, accessKey);
         }
     }
 }
