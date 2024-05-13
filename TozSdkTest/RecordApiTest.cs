@@ -80,10 +80,6 @@ namespace TozSdkTest
             };
 
             byte[] accessKey = await recordApi.GetAccessKey(clientConfig, "example");
-            foreach (byte b in accessKey)
-            {
-                Console.Write($"{b} ");
-            }
 
             byte[] expectedAccessKey = new byte[]
             {
