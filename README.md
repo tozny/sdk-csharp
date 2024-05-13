@@ -12,6 +12,7 @@ The next thing you need to decrypt a record is an encrypted TOZ Store record. Yo
 
 - **Using the JavaScript SDK:** Clone a local copy of the js-sdk to your device. Add `console.log(record)` before decrypting the record [here](https://github.com/tozny/js-sdk/blob/c5176da3ae681bcc7077ec7b325c5922d564096d/lib/storage/client.js#L201). Import the local copy of the js-sdk to a node project and follow the js-sdk documentation to create and read a record. When reading the record, the encrypted record will now print to your console.
 - **Using the Dashboard:** Select any client in your dashboard and click the + button next to the Records header. Click on the newly created record and locate your network requests in your browser. Select the request for `https://api.e3db.com/v1/storage/records/[record ID]`. The encrypted record will be printed in the response. All encrypted data is listed under `data`.
+- **Using the C SDK:** Follow the C SDK instructions to create a record, and run the example script to print the encrypted record.
 
 Now that you have an encrypted record and a client config, you can fetch an access key and decrypt your record.
 
