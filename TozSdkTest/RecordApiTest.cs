@@ -13,108 +13,112 @@ namespace TozSdkTest
 
             byte[] accessKey = new byte[]
             {
-                216,
-                36,
-                111,
-                96,
-                219,
-                190,
-                193,
-                124,
-                164,
-                160,
+                136,
+                228,
+                185,
+                215,
+                198,
+                30,
                 68,
-                132,
-                125,
-                32,
-                39,
-                187,
+                134,
+                173,
+                206,
+                131,
+                216,
+                157,
+                101,
+                50,
+                31,
+                248,
+                224,
+                123,
+                181,
+                28,
+                163,
+                175,
+                41,
                 19,
-                147,
+                162,
+                72,
+                11,
+                31,
+                247,
                 177,
-                135,
-                98,
-                76,
-                207,
-                97,
-                53,
-                126,
-                99,
-                9,
-                90,
-                202,
-                161,
-                75
+                191
             };
 
             string recordAsJson =
                 "{"
-                + "\"Hello\": \"eXe3NPDQg3Uk-q_oQEDP3XWa1qTvESs21v_436mWbeh1VjdLPLupkkECTr6YF8iX.KupVC7EuKd5BIrlJ83RgJ4shYvVYPxJY.MKChHMri0_mZT3nk4c2U_Yx57RDq.gEkWI_F_0ai0nYmu9gMZnqy5eJubWdP1\","
-                + "\"Hello2\": \"ec-r4rXBOWMifdGJE0E3H5SNIzVMlYfpYfOTTOHtUCty1Y_LUJ8Q9MynhDa2MalL.HYRF8Rjn9vh9fOQvT-ZHGSW3J8v-qTfe.k6ij8kAyLndCzBtMV95aJZfv9ItEgw.37s4pAsEyW2_nhx3I9hhGcD_gL6L2KwK\","
+                + "\"Hola\": \"qlK8I8BxBFIXaolLTxEdT3pTOwr463Tw-G04Y-RzhweYzoIQghGDGohVI2QC1HHH.odxXRbEhb5aea_2f9KlU065pQKjNCjRB.BsXJPBCTSjI7fijPYBBdY-yVNNdC.Vz9U9K4Z9YNg7q1byBqncLXIJCs3CFXH\","
+                + "\"Hello\": \"jIyckoBr2CaYUqhGEQgoD3nKf3L24kdo60yCCg_dH4dOBuSI_ntGlNptynoE_PzG.jHPPcO4tMub85Pb-zfVFhBvKOETU19HN.6L0v4MrTvC1HKRVdJ8E0fy--_66L.92KBaICMD-YzOidw2ZpLpmtrK0DVzCB8\","
                 + "\"Plain Meta\": {"
-                + "\"Type\": \"Test\""
+                + "\"Type\": \"Example\""
                 + "}"
                 + "}";
             var decryptedRecord = recordApi.DecryptRecordFromJson(accessKey, recordAsJson);
             string expectedJson =
-                "{\"Hello\":\"world\",\"Hello2\":\"world2\",\"Plain Meta\":\"{\\\"Type\\\": \\\"Test\\\"}\"}";
+                "{\"Hola\":\"Mundo\",\"Hello\":\"World\",\"Plain Meta\":\"{\\\"Type\\\": \\\"Example\\\"}\"}";
             var expectedJObject = JObject.Parse(expectedJson);
             var actualJObject = JObject.Parse(decryptedRecord);
             Assert.True(JToken.DeepEquals(expectedJObject, actualJObject));
         }
 
         [Fact]
-        public async void TestRecordApiShouldFetchAuthToken()
+        public async void TestRecordApiShouldFetchAccessKey()
         {
             var recordApi = new RecordApi();
 
             var clientConfig = new ClientConfig
             {
                 ApiUrl = "https://api.e3db.com",
-                ApiKeyId = "7e1310b28746ba91849336028d566d9de8014b86c4bc2bfcd9747b9ad2f9c536",
-                ApiSecret = "7f1c10f5251a1e2b1fe8259c10edc96933d5912fce2d8debbd486cb98ce6fc31",
-                WriterId = "cdb1ffdb-e483-4c4f-9203-db18c1230c9c",
-                ReaderId = "cdb1ffdb-e483-4c4f-9203-db18c1230c9c",
-                PublicKey = "C-nEyHg-yElIiyjUN0H6SMQewKu7sxZo3YwfEhwNHVA",
-                PrivateKey = "hXNziK_9GjcwrXBnUX9vTGT0iVxjXFeWVtxrBGdgWK8"
+                ApiKeyId = "d99d32fdfcd129bf64e35bc8ee9eca59c7d373c65a94939d47992efe26128e4e",
+                ApiSecret = "0e716af806f296165a3cdd5a22ad88b97d1ce05fbee481f74d5741d38ef2d0ab",
+                WriterId = "63a7cf10-ca6f-426b-abdf-51db543f72d4",
+                ReaderId = "63a7cf10-ca6f-426b-abdf-51db543f72d4",
+                PublicKey = "7ipGnoerFVcBfpfw1M4CEWKbZ94zHGPUEHxuMhvq3Tw",
+                PrivateKey = "ifhP835PF7pRgCLHxfO6Oth_jegmPIGxrcDBgS1wrDo"
             };
 
-            byte[] accessKey = await recordApi.GetAccessKey(clientConfig, "test");
+            byte[] accessKey = await recordApi.GetAccessKey(clientConfig, "example");
+            foreach (byte b in accessKey)
+            {
+                Console.Write($"{b} ");
+            }
 
             byte[] expectedAccessKey = new byte[]
             {
-                216,
-                36,
-                111,
-                96,
-                219,
-                190,
-                193,
-                124,
-                164,
-                160,
+                136,
+                228,
+                185,
+                215,
+                198,
+                30,
                 68,
-                132,
-                125,
-                32,
-                39,
-                187,
+                134,
+                173,
+                206,
+                131,
+                216,
+                157,
+                101,
+                50,
+                31,
+                248,
+                224,
+                123,
+                181,
+                28,
+                163,
+                175,
+                41,
                 19,
-                147,
+                162,
+                72,
+                11,
+                31,
+                247,
                 177,
-                135,
-                98,
-                76,
-                207,
-                97,
-                53,
-                126,
-                99,
-                9,
-                90,
-                202,
-                161,
-                75
+                191
             };
             Assert.Equal(expectedAccessKey, accessKey);
         }
