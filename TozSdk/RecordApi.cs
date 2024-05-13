@@ -10,7 +10,7 @@ namespace Tozny.Auth
         public string ApiUrl { get; set; }
         public string ApiKeyId { get; set; }
         public string ApiSecret { get; set; }
-        public string WriterId { get; set; }
+        public string ClientId { get; set; }
         public string PublicKey { get; set; }
         public string PrivateKey { get; set; }
     }
@@ -54,7 +54,7 @@ namespace Tozny.Auth
                 config.ApiSecret
             );
             string urlString =
-                $"{config.ApiUrl}/v1/storage/access_keys/{config.WriterId}/{config.WriterId}/{config.WriterId}/{type}";
+                $"{config.ApiUrl}/v1/storage/access_keys/{config.ClientId}/{config.ClientId}/{config.ClientId}/{type}";
 
             using (HttpClient client = new HttpClient())
             {

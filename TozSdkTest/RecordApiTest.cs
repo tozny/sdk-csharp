@@ -73,7 +73,7 @@ namespace TozSdkTest
                 ApiUrl = "https://api.e3db.com",
                 ApiKeyId = "d99d32fdfcd129bf64e35bc8ee9eca59c7d373c65a94939d47992efe26128e4e",
                 ApiSecret = "0e716af806f296165a3cdd5a22ad88b97d1ce05fbee481f74d5741d38ef2d0ab",
-                WriterId = "63a7cf10-ca6f-426b-abdf-51db543f72d4",
+                ClientId = "63a7cf10-ca6f-426b-abdf-51db543f72d4",
                 PublicKey = "7ipGnoerFVcBfpfw1M4CEWKbZ94zHGPUEHxuMhvq3Tw",
                 PrivateKey = "ifhP835PF7pRgCLHxfO6Oth_jegmPIGxrcDBgS1wrDo"
             };
