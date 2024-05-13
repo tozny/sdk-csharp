@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Tozny.Auth;
-using Xunit;
-
-namespace Tozny.Auth.Tests
+﻿namespace Tozny.Auth.Tests
 {
-    public class UserApiTests
-    {
+	public class UserApiTests
+	{
 		[Fact]
 		public async Task testSessionStatus()
 		{
@@ -21,5 +14,5 @@ namespace Tozny.Auth.Tests
 
 			Assert.Equal(status.Status, "Invalid Session");
 		}
-    }
+	}
 }
