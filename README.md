@@ -21,13 +21,13 @@ Update the `TestRecordApiShouldDecryptRecord` test with your access key and encr
 
 ```bash
    "{"
-                + "\"Data Key 1\": \"[Encrypted Data 1]\","
-                + "\"Data Key 2\": \"[Encrypted Data 2]\","
-                + "\"Plain Meta\": {"
-                + "\"Type\": \"[Record type]\","
-                + "\"Meta Key 1\": \"[Plaintext data 1]\""
-                + "}"
-                + "}";
+    + "\"Data Key 1\": \"[Encrypted Data 1]\","
+    + "\"Data Key 2\": \"[Encrypted Data 2]\","
+    + "\"Plain Meta\": {"
+    + "\"Type\": \"[Record type]\","
+    + "\"Meta Key 1\": \"[Plaintext data 1]\""
+    + "}"
+    + "}";
 ```
 
 To run the tests in RecordApiTest.cs, run `dotnet test --filter "FullyQualifiedName~TozSdkTest.RecordApiTests"`
