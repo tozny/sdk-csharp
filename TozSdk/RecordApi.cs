@@ -117,14 +117,6 @@ namespace Tozny.Auth
             return plainText;
         }
 
-        public bool IsNotMetaTag(string input)
-        {
-            // Convert input string to lowercase
-            string lowercaseInput = input.ToLower();
-
-            return !lowercaseInput.Contains("meta") && !lowercaseInput.Contains("plain");
-        }
-
         public JArray ConvertToJsonArray(object jsonData)
         {
             if (jsonData is JArray array)
