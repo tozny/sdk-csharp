@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Sodium;
 
 namespace Tozny.Auth
@@ -124,26 +125,65 @@ namespace Tozny.Auth
             return !lowercaseInput.Contains("meta") && !lowercaseInput.Contains("plain");
         }
 
-        public string DecryptRecordFromJson(byte[] accessKey, string recordJson)
+        public JArray ConvertToJsonArray(object jsonData)
         {
-            var jsonDocument = JsonDocument.Parse(recordJson);
-            var decryptedRecord = new Dictionary<string, string>();
-            foreach (var element in jsonDocument.RootElement.EnumerateObject())
+            if (jsonData is JArray array)
             {
-                if (IsNotMetaTag(element.Name))
+                return array;
+            }
+
+            if (jsonData is string jsonString)
+            {
+                JToken jsonToken = JToken.Parse(jsonString);
+                if (jsonToken is JArray)
+                    return (JArray)jsonToken;
+                if (jsonToken is JObject)
+                    return new JArray(jsonToken.Children<JProperty>().Select(jp => jp.Value));
+            }
+
+            if (jsonData is JObject jsonObject)
+            {
+                return new JArray(jsonObject.Properties().Select(p => p.Value));
+            }
+
+            throw new ArgumentException("Unsupported type of jsonData");
+        }
+
+        public string DecryptRecordFromJson(byte[] accessKey, object record)
+        {
+            // Convert record to JSON array
+            var recordArray = ConvertToJsonArray(record);
+
+            // Initialize up decrypted data and metadata
+            var decryptedData = new Dictionary<string, string>();
+            var metadata = new Dictionary<string, string>();
+
+            if (recordArray.Count > 0)
+            {
+                // Get the encrypted record data
+                JObject data = (JObject)recordArray[0];
+                foreach (var property in data.Properties())
                 {
-                    var plainText = DecryptRecord(accessKey, element.Value.ToString());
-                    decryptedRecord.Add(element.Name.ToString(), plainText);
+                    // Decrypt the data
+                    var plainText = DecryptRecord(accessKey, property.Value.ToString());
+                    decryptedData.Add(property.Name.ToString(), plainText);
                 }
-                else
+
+                // Get the plaintext record metadata
+                JObject meta = (JObject)recordArray[1];
+                foreach (var property in meta.Properties())
                 {
-                    decryptedRecord.Add(element.Name.ToString(), element.Value.ToString());
+                    metadata.Add(property.Name.ToString(), property.Value.ToString());
                 }
             }
 
-            string decryptedRecordJson = JsonConvert.SerializeObject(decryptedRecord);
-
-            return decryptedRecordJson;
+            // Construct the decrypted record
+            JArray resultArray = new JArray
+            {
+                JObject.FromObject(decryptedData),
+                JObject.FromObject(metadata)
+            };
+            return resultArray.ToString();
         }
     }
 }
