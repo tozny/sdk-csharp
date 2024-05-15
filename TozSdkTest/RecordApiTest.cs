@@ -48,19 +48,34 @@ namespace TozSdkTest
             };
 
             string recordAsJson =
-                "{"
-                + "\"Hola\": \"qlK8I8BxBFIXaolLTxEdT3pTOwr463Tw-G04Y-RzhweYzoIQghGDGohVI2QC1HHH.odxXRbEhb5aea_2f9KlU065pQKjNCjRB.BsXJPBCTSjI7fijPYBBdY-yVNNdC.Vz9U9K4Z9YNg7q1byBqncLXIJCs3CFXH\","
-                + "\"Hello\": \"jIyckoBr2CaYUqhGEQgoD3nKf3L24kdo60yCCg_dH4dOBuSI_ntGlNptynoE_PzG.jHPPcO4tMub85Pb-zfVFhBvKOETU19HN.6L0v4MrTvC1HKRVdJ8E0fy--_66L.92KBaICMD-YzOidw2ZpLpmtrK0DVzCB8\","
-                + "\"Plain Meta\": {"
-                + "\"Type\": \"Example\""
-                + "}"
-                + "}";
-            var decryptedRecord = recordApi.DecryptRecordFromJson(accessKey, recordAsJson);
-            string expectedJson =
-                "{\"Hola\":\"Mundo\",\"Hello\":\"World\",\"Plain Meta\":\"{\\\"Type\\\": \\\"Example\\\"}\"}";
-            var expectedJObject = JObject.Parse(expectedJson);
-            var actualJObject = JObject.Parse(decryptedRecord);
-            Assert.True(JToken.DeepEquals(expectedJObject, actualJObject));
+                @"[
+            {
+                'Hola': 'qlK8I8BxBFIXaolLTxEdT3pTOwr463Tw-G04Y-RzhweYzoIQghGDGohVI2QC1HHH.odxXRbEhb5aea_2f9KlU065pQKjNCjRB.BsXJPBCTSjI7fijPYBBdY-yVNNdC.Vz9U9K4Z9YNg7q1byBqncLXIJCs3CFXH',
+                'Hello': 'jIyckoBr2CaYUqhGEQgoD3nKf3L24kdo60yCCg_dH4dOBuSI_ntGlNptynoE_PzG.jHPPcO4tMub85Pb-zfVFhBvKOETU19HN.6L0v4MrTvC1HKRVdJ8E0fy--_66L.92KBaICMD-YzOidw2ZpLpmtrK0DVzCB8',
+            },
+            {
+                'Type': 'Example',
+                'Company': 'Tozny',
+                'Team': 'Software'
+            }
+            ]";
+
+            var decryptedRecord = recordApi.DecryptRecordFromJson(
+                accessKey,
+                recordAsJson
+            );
+            Console.WriteLine(decryptedRecord);
+
+            string expectedRecord =
+                "[{\"Hola\":\"Mundo\",\"Hello\":\"World\"},{\"Type\":\"Example\",\"Company\":\"Tozny\",\"Team\":\"Software\"}]";
+
+            JArray expectedJArray = JArray.Parse(expectedRecord);
+            JArray actualJArray = JArray.Parse(decryptedRecord);
+
+            Assert.True(
+                JToken.DeepEquals(expectedJArray, actualJArray),
+                "The expected decrypted record does not match the actual decrypted record."
+            );
         }
 
         [Fact]
