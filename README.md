@@ -35,3 +35,26 @@ Update the `TestRecordApiShouldDecryptRecord` test with your access key and encr
 ```
 
 To run the tests in RecordApiTest.cs, run `dotnet test --filter "FullyQualifiedName~TozSdkTest.RecordApiTests"`
+
+## Publishing
+
+To publish this SDK using Nuget package manager, first update the version by changing the value in TozSdk.csproj.
+
+```bash
+ <Version>New version number here</Version>
+
+ Example:
+ <Version>1.0.1</Version>
+```
+
+Then run the following commands:
+
+```bash
+dotnet build --configuration Release
+```
+
+```bash
+dotnet pack --configuration Release
+```
+
+Then upload the .nupkg file in TozSdk/bin/Release to [NuGet](https://www.nuget.org/packages/Tozny.CSharp.Sdk).
