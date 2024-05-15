@@ -38,7 +38,16 @@ To run the tests in RecordApiTest.cs, run `dotnet test --filter "FullyQualifiedN
 
 ## Publishing
 
-To publish this SDK using Nuget package manager, run the following commands:
+To publish this SDK using Nuget package manager, first update the version by changing the value in TozSdk.csproj.
+
+```bash
+ <Version>New version number here</Version>
+
+ Example:
+ <Version>1.0.1</Version>
+```
+
+Then run the following commands:
 
 ```bash
 dotnet build --configuration Release
