@@ -4,11 +4,27 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>Tozny.CSharp.Sdk</PackageId>
+    <Version>1.0.1</Version>
+    <Authors>Tozny</Authors>
+    <Company>Tozny</Company>
+    <Description>Tozny's .NET C# SDK.</Description>
+    <PackageTags>security, encryption, authentication, sdk</PackageTags>
+    <RepositoryUrl>https://github.com/tozny/sdk-csharp</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/tozny/sdk-csharp</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild> <!-- Optional: Automatically creates a NuGet package on build -->
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Sodium.Core" Version="1.3.5" />
+    <None Include="../LICENSE.md" Pack="true" PackagePath=""/>
+    <None Include="../README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>
