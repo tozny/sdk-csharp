@@ -11,7 +11,7 @@ Before you begin testing, you'll need a TOZ Store client config, which you can o
 The next thing you need to decrypt a record is an encrypted TOZ Store record. You can create an encrypted record via the Dashboard or one of our SDKs. There is no direct way to obtain the encrypted record stored on our server, however there are several workarounds. Here are two suggestions:
 
 - **Using the JavaScript SDK:** Clone a local copy of the js-sdk to your device and install it into a node project.
-    - Creating a record: Use the writeRecord() function, passing in a string for the type, and a key value pair for the data (this will be encrypted) and metadata (this will remain unencrypted).
+    - Creating a record: Use the writeRecord() function, passing in a string for the type, and a key value pair object for the data (this will be encrypted) and metadata (this will remain unencrypted).
     - Getting an encrypted record: Add `console.log(record)` before decrypting the record [here](https://github.com/tozny/js-sdk/blob/c5176da3ae681bcc7077ec7b325c5922d564096d/lib/storage/client.js#L201). Import the local copy of the js-sdk to a node project and follow the js-sdk documentation to create and read a record. When reading the record, the encrypted record will now print to your console.
 - **Using the Dashboard:**
     - Creating a record: Select any client in your dashboard and click the + button next to the Records header. You will be prompted to add the record type and any data (this will be encrypted) and metadata (this will remain unencrypted) key value pairs.
