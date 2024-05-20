@@ -10,15 +10,19 @@ Before you begin testing, you'll need a TOZ Store client config, which you can o
 
 The next thing you need to decrypt a record is an encrypted TOZ Store record. You can create an encrypted record via the Dashboard or one of our SDKs. There is no direct way to obtain the encrypted record stored on our server, however there are several workarounds. Here are two suggestions:
 
-- **Using the JavaScript SDK:** Clone a local copy of the js-sdk to your device. Add `console.log(record)` before decrypting the record [here](https://github.com/tozny/js-sdk/blob/c5176da3ae681bcc7077ec7b325c5922d564096d/lib/storage/client.js#L201). Import the local copy of the js-sdk to a node project and follow the js-sdk documentation to create and read a record. When reading the record, the encrypted record will now print to your console.
-- **Using the Dashboard:** Select any client in your dashboard and click the + button next to the Records header. Click on the newly created record and locate your network requests in your browser. Select the request for `https://api.e3db.com/v1/storage/records/[record ID]`. The encrypted record will be printed in the response. All encrypted data is listed under `data`.
+- **Using the JavaScript SDK:** Clone a local copy of the js-sdk to your device and install it into a node project.
+    - Creating a record: Use the writeRecord() function, passing in a string for the type, and a key value pair for the data (this will be encrypted) and metadata (this will remain unencrypted).
+    - Getting an encrypted record: Add `console.log(record)` before decrypting the record [here](https://github.com/tozny/js-sdk/blob/c5176da3ae681bcc7077ec7b325c5922d564096d/lib/storage/client.js#L201). Import the local copy of the js-sdk to a node project and follow the js-sdk documentation to create and read a record. When reading the record, the encrypted record will now print to your console.
+- **Using the Dashboard:**
+    - Creating a record: Select any client in your dashboard and click the + button next to the Records header. You will be prompted to add the record type and any data (this will be encrypted) and metadata (this will remain unencrypted) key value pairs.
+    - Getting an encrypted record: Click on the newly created record and locate your network requests in your browser. Select the request for `https://api.e3db.com/v1/storage/records/[record ID]`. The encrypted record will be printed in the response. All encrypted data is listed under `data`.
 - **Using the C SDK:** Follow the C SDK instructions to create a record, and run the example script to print the encrypted record.
 
 Now that you have an encrypted record and a client config, you can fetch an access key and decrypt your record.
 
-Update the `TestRecordApiShouldFetchAccessKey` test with your client config details. Note that `type` passed into GetAccessKey() must already exist for the current client. GetAccessKey() fetches an existing access key from the server, which is based on the record type.
-
-Update the `TestRecordApiShouldDecryptRecord` test with your access key and encrypted record. The record is formatted as a JSON string:
+The test file is already populated with a valid example client config and an example access key. There are no updates required to run the tests. However, if you wish to use your own client or record info you simply need to update the test file:
+- Update the `TestRecordApiShouldFetchAccessKey` test with your client config details. Note that `type` passed into GetAccessKey() must already exist for the current client. GetAccessKey() fetches an existing access key from the server, which is based on the record type. A record type is assigned with creating a record. See the section on Records for information on how to create a record.
+- Update the `TestRecordApiShouldDecryptRecord` test with your access key and encrypted record. The record is formatted as a JSON string:
 
 ```bash
     @"[
