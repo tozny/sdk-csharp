@@ -16,7 +16,7 @@ The next thing you need to decrypt a record is an encrypted TOZ Store record. Yo
 
 Now that you have an encrypted record and a client config, you can fetch an access key and decrypt your record.
 
-Update the `TestRecordApiShouldFetchAccessKey` test with your client config details.
+Update the `TestRecordApiShouldFetchAccessKey` test with your client config details. Note that `type` passed into GetAccessKey() must already exist for the current client. GetAccessKey() fetches an existing access key from the server, which is based on the record type.
 
 Update the `TestRecordApiShouldDecryptRecord` test with your access key and encrypted record. The record is formatted as a JSON string:
 
