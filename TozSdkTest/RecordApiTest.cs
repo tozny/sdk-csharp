@@ -71,7 +71,7 @@ namespace TozSdkTest
             Console.WriteLine(decryptedRecord);
 
             string expectedRecord =
-            "[{\"batteryRemaining\":\"10\",\"timestamp\":\"1707901342000\",\"grossStatus\":\"active\",\"rssiWifi\":\"13\",\"rssiUwb\":\"23\",\"zoneInfo\":\"zone-1\",\"batteryRaw\":\"20\"},{\"eventType\":\"telemetry\",\"gatewayId\":\"9999999\",\"deviceType\":\"fab\",\"dataType\":\"deviceHealthMetrics\",\"deviceId\":\"6666666\"}]";
+                "[{\"batteryRemaining\":\"10\",\"timestamp\":\"1707901342000\",\"grossStatus\":\"active\",\"rssiWifi\":\"13\",\"rssiUwb\":\"23\",\"zoneInfo\":\"zone-1\",\"batteryRaw\":\"20\"},{\"eventType\":\"telemetry\",\"gatewayId\":\"9999999\",\"deviceType\":\"fab\",\"dataType\":\"deviceHealthMetrics\",\"deviceId\":\"6666666\"}]";
 
             JArray expectedJArray = JArray.Parse(expectedRecord);
             JArray actualJArray = JArray.Parse(decryptedRecord);
@@ -98,6 +98,13 @@ namespace TozSdkTest
             };
 
             byte[] accessKey = await recordApi.GetAccessKey(clientConfig, "deviceHealthMetrics");
+
+            Console.Write("[");
+            foreach (byte b in accessKey)
+            {
+                Console.Write($"{b}, ");
+            }
+            Console.WriteLine("]");
 
             byte[] expectedAccessKey = new byte[]
             {
